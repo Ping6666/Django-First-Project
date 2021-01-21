@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>
+    FireSafety detail
+</title>
+
+{% endblock %}
+
+{% block body %}
+
+<h5>
+    <a href='/firesafety/'>
+        FireSafety list homepage
+    </a>
+</h5>
+
+<div class="card text-center">
+    <!-- 
+    <div class="card-header">
+    </div>
+    -->
+    <div class="card-body">
+        <h5 class="card-title">
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    場所名稱
+                </div>
+                <div class="col-3">
+                    {{ object.place_name }}
+                </div>
+            </div>
+        </h5>
+        <p class="card-text">
+        <div class="row justify-content-center">
+            <div class="col-3">
+                場所地址
+            </div>
+            <div class="col-3">
+                {{ object.place_address }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3">
+                場所用途
+            </div>
+            <div class="col-3">
+                {{ object.place_purpose }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3">
+                違規項目
+            </div>
+            <div class="col-3">
+                {{ object.violate_name }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3">
+                檢查日期
+            </div>
+            <div class="col-3">
+                {{ object.check_time }}
+            </div>
+        </div>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script async defer src='https://maps.googleapis.com/maps/api/js?key={{ MyApiKey }}&libraries=places&callback=initMap'>
+</script>
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+        height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+        height: 100%;
+        margin: 10;
+        padding: 0;
+    }
+</style>
+<script>
+    var map;
+    var service;
+    var infowindow;
+
+    var geocoder;
+
+    function initMap() {
+        const taiwan = new google.maps.LatLng(23.858987, 120.917631);
+        infowindow = new google.maps.InfoWindow();
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 7,
+            center: taiwan,
+            // draggable: false,
+            zoomControl: false,
+            scaleControl: false,
+            rotateControl: false,
+            fullscreenControl: false,
+            mapTypeControl: false,
+            streetViewControl: false,
+        });
+
+        var addr_list = '{{ addr_list|escapejs }}';
+        addr_list = addr_list.split(",");
+        var name_list = '{{ name_list|escapejs }}';
+        name_list = name_list.split(",");
+        var num_list = '{{ num_list|escapejs }}';
+        num_list = num_list.split(",");
+
+        geocoder = new google.maps.Geocoder();
+        service = new google.maps.places.PlacesService(map);
+
+        for (let i = 0; i < addr_list.length; i++) {
+            var test = 0;
+            for (var j = 0; j < i; j++) {
+                if (addr_list[j] === addr_list[i]) {
+                    test = 1;
+                }
+            }
+            if (test === 1 || num_list[i] === '0') {
+                // tmpcounter += 1;
+                // if (i == addr_list.length - 1) {
+                //     console.log(i + 'fail times: ' + tmpcounter);
+                // }
+                continue
+            }
+
+            var request = {
+                query: String(addr_list[i]), // 傳入地址
+                fields: ['name', 'geometry'],
+            };
+
+            geocoder.geocode({ 'address': request.query }, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    // for (let z = 0; z < results.length; z++) {
+                    // console.log(addr_list[i], name_list[i], num_list[i]);
+                    // createMarker(results[z], addr_list[i], name_list[i], num_list[i]);
+                    // }
+                    createMarker(results[0], addr_list[i], name_list[i], num_list[i]);
+                    // map.setCenter(results[0].geometry.location);
+                }
+                else {
+                    // console.log(status);
+                    console.log(request.query);
+                }
+            });
+            // service.findPlaceFromQuery(request, (results, status) => {
+            //     if (status === google.maps.places.PlacesServiceStatus.OK) {
+            //         // for (let z = 0; z < results.length; z++) {
+            //         // console.log(addr_list[i], name_list[i], num_list[i]);
+            //         // createMarker(results[z], addr_list[i], name_list[i], num_list[i]);
+            //         // }
+            //         createMarker(results[0], addr_list[i], name_list[i], num_list[i]);
+            //         // map.setCenter(results[0].geometry.location);
+            //     }
+            //     else {
+            //         console.log(status);
+            //         console.log(request[0]);
+            //     }
+            // });
+        }
+    }
+    function createMarker(place, addr_, name_, num_) {
+        var check = -1;
+        var marker = new google.maps.Marker({
+            position: place.geometry.location,
+            map: map,
+        });
+        // markersTraffic.push(marker);
+        var infowindow = new google.maps.InfoWindow({
+            content:
+                '<div class="row justify-content-center"><div class="col-md-6">' +
+                '<h6>營業人名稱</h6></div><div class="col-md-6">' +
+                name_ + '</div></div>' +
+                '<div class="row justify-content-center"><div class="col-md-6">' +
+                '<h6>營業地址</h6></div><div class="col-md-6">' +
+                addr_ + '</div></div>' +
+                '<div class="row justify-content-center"><div class="col-md-6">' +
+                '<h6><form action=".." method="POST">{% csrf_token %}' +
+                '<input name="search_" type="text" value="' +
+                num_ + '"></form></h6></div><div class="col-md-6">' +
+                '<a href="https://www.google.com/maps/search/?api=1&query=' +
+                addr_ + '"> open map</a ></div></div>'
+        });
+
+        marker.addListener('click', function () {
+            check = check * -1;
+            if (check > 0) {
+                infowindow.open(map, marker);
+            } else {
+                infowindow.close();
+            }
+        });
+    }
+</script>
+
+<title>
+    Company list
+</title>
+{% endblock %}
+
+{% block body %}
+
+<h1>Company list</h1>
+
+<form action="." method='POST'>
+    {% csrf_token %}
+    <input name="search_" type="text" placeholder="Search...">
+</form>
+
+<h5><a href='..'>Company list homepage</a></h5>
+
+<div id="map"></div>
+
+</div>
+
+{% endblock %}

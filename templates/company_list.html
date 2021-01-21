@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>
+    Company list
+</title>
+{% endblock %}
+
+{% block body %}
+
+<h1>Company list</h1>
+<form action="." method='POST'>
+    {% csrf_token %}
+    <input name="search_" type="text" placeholder="Search...">
+</form>
+
+<p id="demo_0"></p>
+<p id="demo_1"></p>
+
+<script>
+    document.getElementById("demo_0").innerHTML = '{{ api_result|escapejs }}';
+    var tmp = JSON.parse(('{{ api_result|escapejs }}'));
+    document.getElementById("demo_1").innerHTML = tmp[0].Business_Accounting_NO;
+</script>
+
+<div class="col-lg">
+    {% if object_list %}
+
+    <h5><a href='map/'>Company maplist homepage</a></h5>
+    <h5><a href='/home/'>Homepage list homepage</a></h5>
+
+    <div class="card text-center">
+        <!--
+        <div class="card-header">
+                </div>
+        -->
+        <div class="card-body">
+            <!--
+            <h5 class="card-title">
+                    </h5>
+            -->
+
+            <p class="card-text">
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    查詢結果數量
+                </div>
+                <div class="col-6">
+                    {{ list_length }} 個結果
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+
+    {% for now_obj in object_list %}
+    <div class="card text-center">
+        <!--
+        <div class="card-header">
+                </div>
+         -->
+        <div class="card-body">
+            <h5 class="card-title">
+                <div class="row justify-content-center">
+                    <div class="col-3">
+                        營業人名稱
+                    </div>
+                    <div class="col-6">
+                        {{ now_obj.3 }}
+                    </div>
+                </div>
+            </h5>
+
+            <p class="card-text">
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    營業地址
+                </div>
+                <div class="col-6">
+                    {{ now_obj.0 }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    統一編號<br>
+                    總機構統一編號
+                </div>
+                <div class="col-6">
+                    {{ now_obj.1 }}<br>
+                    {{ now_obj.2 }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    資本額
+                </div>
+                <div class="col-6">
+                    {{ now_obj.4 }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    設立日期
+                </div>
+                <div class="col-6">
+                    {{ now_obj.5 }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    組織別名稱
+                </div>
+                <div class="col-6">
+                    {{ now_obj.6 }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    使用統一發票
+                </div>
+                <div class="col-6">
+                    {{ now_obj.7 }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    行業代號：名稱
+                </div>
+                <div class="col-6">
+                    {{ now_obj.8 }}：{{ now_obj.9 }}<br>
+
+                    {% if now_obj.10 and now_obj.11 %}
+                    {{ now_obj.10 }}：{{ now_obj.11 }}<br>
+                    {% endif %}
+
+                    {% if now_obj.12 and now_obj.13 %}
+                    {{ now_obj.12 }}：{{ now_obj.13 }}<br>
+                    {% endif %}
+
+                    {% if now_obj.14 and now_obj.15 %}
+                    {{ now_obj.14 }}：{{ now_obj.15 }}<br>
+                    {% endif %}
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h5><a href='/home/'>Homepage list homepage</a></h5>
+
+    {% else %}
+
+    <h5><a href='map/'>Company maplist homepage</a></h5>
+
+    <div class="card text-center">
+        <!--
+        <div class="card-header">
+                                        </div>
+        -->
+        <div class="card-body">
+            <h5 class="card-title">
+                Search the Dataset.
+            </h5>
+            <p class="card-text">
+
+                {% if not search_result %}
+            <p>can't not search the dataset for empty string.</p>
+            {% else %}
+            <p>can't not find any object that has {{ search_result }}.</p>
+            {% endif %}
+
+            </p>
+        </div>
+    </div>
+
+    <h5><a href='/home/'>Homepage list homepage</a></h5>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

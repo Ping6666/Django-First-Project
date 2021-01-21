@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>
+    Homepage list
+</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="col-lg">
+
+    <h1>Homepage list</h1>
+
+    {% if object_list %}
+
+    {% for now_obj in object_list %}
+    <div class="card text-center">
+        <!-- 
+        <div class="card-header">
+        </div>
+         -->
+        <div class="card-body">
+            <h5 class="card-title">
+                <a href='../{{ now_obj.page_name }}/'>
+                    {{ now_obj.page_name }}
+                </a>
+            </h5>
+            <p class="card-text">
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% else %}
+
+    <p>
+        Can't not find any page on the server.<br>
+        If you seeing this, please contact administrator
+    </p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

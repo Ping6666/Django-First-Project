@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>
+    FireSafety list
+</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="col-lg">
+
+    <h1>FireSafety list</h1>
+    <form action="." method='POST'>
+        {% csrf_token %}
+        <input name="search_" type="text" placeholder="Search...">
+    </form>
+
+    {% if object_list %}
+
+    {% if not search_result %}
+    <h5><a href='/home/'>Homepage list homepage</a></h5>
+    {% else %}
+    <h5><a href='/firesafety/'>Back to fireSafety list homepage</a></h5>
+    {% endif %}
+
+    {% for now_obj in object_list %}
+    <div class="card text-center">
+        <!--         
+        <div class="card-header">
+        </div>
+         -->
+        <div class="card-body">
+            <h5 class="card-title">
+                <div class="row justify-content-center">
+                    <div class="col-3">
+                        場所名稱
+                    </div>
+                    <div class="col-3">
+                        <a href='{{ now_obj.get_absolute_url }}'>
+                            {{ now_obj.place_name }}
+                        </a>
+                    </div>
+                </div>
+            </h5>
+
+            <p class="card-text">
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    場所地址
+                </div>
+                <div class="col-3">
+                    {{ now_obj.place_address }}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    場所用途
+                </div>
+                <div class="col-3">
+                    {{ now_obj.place_purpose }}
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if not search_result %}
+    <h5><a href='/home/'>Homepage list homepage</a></h5>
+    {% else %}
+    <h5><a href='/firesafety/'>Back to fireSafety list homepage</a></h5>
+    {% endif %}
+
+    {% else %}
+
+
+
+    <div class="card text-center">
+        <!-- 
+        <div class="card-header">
+        </div>
+        -->
+        <div class="card-body">
+            <h5 class="card-title">
+                Search not found.
+            </h5>
+            <p class="card-text">
+
+            <p><a href='/firesafety/'>Back to fireSafety list homepage</a></p>
+
+            {% if not search_result %}
+            <p>can't not search the dataset for empty string.</p>
+            {% else %}
+            <p>can't not find any object that has {{ search_result }}.</p>
+            {% endif %}
+
+            </p>
+        </div>
+    </div>
+
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

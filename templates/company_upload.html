@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>
+    Company Upload
+</title>
+
+{% endblock %}
+
+{% block body %}
+
+<form action="" method='POST' enctype="multipart/form-data">
+
+    <h5>
+        Company File Upload Page
+    </h5>
+
+    {% csrf_token %}
+
+    <input type='file' name='input_file'><br>
+
+    <button type="submit">
+        Confirm
+    </button>
+
+    {% if not file_status %}
+    <h5>
+        <a href='{{ file_url }}'>{{ file_name }}</a> is uploaded.
+    </h5>
+    {% else %}
+    <h5>
+        <a href='{{ file_url }}'>{{ file_name }}</a> has already existed.
+    </h5>
+    {% endif %}
+
+</form>
+
+{% endblock %}
